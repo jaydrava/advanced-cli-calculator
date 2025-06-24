@@ -31,3 +31,8 @@ jobs:
     - name: Check coverage
       run: |
         coverage report --fail-under=100
+
+    - name: Run tests with coverage
+      run: |
+        export PYTHONPATH=.
+        pytest --cov=app tests/
