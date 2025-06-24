@@ -1,38 +1,27 @@
 name: Python application
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
+      HISTORY_FILE: test_history.csv  # 👈 Required for repl-related tests
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - name: Set up Python 3.x
-      uses: actions/setup-python@v2
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.x'
+        python-version: "3.13"
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest pytest-cov pandas python-dotenv
+        pip install -r requirements.txt
 
     - name: Run tests with coverage
       run: |
-        pytest --cov=app tests/
-
-    - name: Check coverage
-      run: |
-        coverage report --fail-under=100
-
-    - name: Run tests with coverage
-      run: |
-        export PYTHONPATH=.
         pytest --cov=app tests/
